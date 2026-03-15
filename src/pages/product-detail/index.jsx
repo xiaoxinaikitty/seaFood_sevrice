@@ -1,11 +1,14 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import ProductCard from '../../components/cards/ProductCard.jsx'
 import EmptyState from '../../components/common/EmptyState.jsx'
 import StatusPill from '../../components/common/StatusPill.jsx'
 import { getProductById, products } from '../../mock/data/content.js'
+import { useAppState } from '../../store/AppStateProvider.jsx'
 
 function ProductDetailPage() {
   const { id } = useParams()
+  const navigate = useNavigate()
+  const { favorites, toggleFavorite } = useAppState()
   const product = getProductById(id)
 
   if (!product) {
@@ -15,6 +18,8 @@ function ProductDetailPage() {
       </div>
     )
   }
+
+  const isFavorite = favorites.includes(product.id)
 
   return (
     <div className="page app-container">
@@ -46,8 +51,12 @@ function ProductDetailPage() {
             <div><dt>库存状态</dt><dd>{product.stock}</dd></div>
           </div>
           <div className="detail-panel__actions">
-            <button className="primary-button" type="button">提交模拟订单</button>
-            <button className="ghost-button" type="button">加入收藏</button>
+            <button className="primary-button" type="button" onClick={() => navigate(`/checkout/${product.id}`)}>
+              提交模拟订单
+            </button>
+            <button className="ghost-button" type="button" onClick={() => toggleFavorite(product.id)}>
+              {isFavorite ? '取消收藏' : '加入收藏'}
+            </button>
           </div>
         </div>
       </section>

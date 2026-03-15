@@ -1,6 +1,23 @@
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAppState } from '../../store/AppStateProvider.jsx'
 
 function RegisterPage() {
+  const navigate = useNavigate()
+  const { register } = useAppState()
+  const [form, setForm] = useState({ username: '', phone: '', password: '', confirmPassword: '', code: '' })
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setForm((current) => ({ ...current, [name]: value }))
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    register(form)
+    navigate('/profile')
+  }
+
   return (
     <div className="auth-page app-container">
       <section className="auth-card auth-card--visual auth-card--register">
@@ -13,28 +30,28 @@ function RegisterPage() {
           <h2>创建账号</h2>
           <p>注册后即可浏览商品、收藏、发布求购与提交模拟订单。</p>
         </div>
-        <form className="form-grid form-grid--double">
+        <form className="form-grid form-grid--double" onSubmit={handleSubmit}>
           <label>
             <span>用户名</span>
-            <input placeholder="请输入用户名" type="text" />
+            <input name="username" onChange={handleChange} placeholder="请输入用户名" type="text" value={form.username} />
           </label>
           <label>
             <span>手机号</span>
-            <input placeholder="请输入手机号" type="text" />
+            <input name="phone" onChange={handleChange} placeholder="请输入手机号" type="text" value={form.phone} />
           </label>
           <label>
             <span>密码</span>
-            <input placeholder="请输入密码" type="password" />
+            <input name="password" onChange={handleChange} placeholder="请输入密码" type="password" value={form.password} />
           </label>
           <label>
             <span>确认密码</span>
-            <input placeholder="请再次输入密码" type="password" />
+            <input name="confirmPassword" onChange={handleChange} placeholder="请再次输入密码" type="password" value={form.confirmPassword} />
           </label>
           <label className="form-grid__full">
             <span>验证码</span>
-            <input placeholder="输入短信或邮箱验证码" type="text" />
+            <input name="code" onChange={handleChange} placeholder="输入短信或邮箱验证码" type="text" value={form.code} />
           </label>
-          <button className="primary-button primary-button--block form-grid__full" type="button">
+          <button className="primary-button primary-button--block form-grid__full" type="submit">
             提交注册
           </button>
           <div className="form-grid__full auth-card__footer">

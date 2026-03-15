@@ -1,6 +1,23 @@
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAppState } from '../../store/AppStateProvider.jsx'
 
 function LoginPage() {
+  const navigate = useNavigate()
+  const { login } = useAppState()
+  const [form, setForm] = useState({ account: '', password: '' })
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setForm((current) => ({ ...current, [name]: value }))
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    login(form)
+    navigate('/profile')
+  }
+
   return (
     <div className="auth-page app-container">
       <section className="auth-card auth-card--visual">
@@ -16,16 +33,16 @@ function LoginPage() {
       <section className="auth-card auth-card--form">
         <div className="auth-card__header">
           <h2>账号登录</h2>
-          <p>演示页数据为静态模拟，后续可直接接入认证接口。</p>
+          <p>演示页数据为静态模拟，提交后将进入个人中心页。</p>
         </div>
-        <form className="form-grid">
+        <form className="form-grid" onSubmit={handleSubmit}>
           <label>
             <span>用户名 / 手机号 / 邮箱</span>
-            <input placeholder="请输入登录账号" type="text" />
+            <input name="account" onChange={handleChange} placeholder="请输入登录账号" type="text" value={form.account} />
           </label>
           <label>
             <span>密码</span>
-            <input placeholder="请输入密码" type="password" />
+            <input name="password" onChange={handleChange} placeholder="请输入密码" type="password" value={form.password} />
           </label>
           <div className="form-row form-row--between">
             <label className="checkbox-field">
@@ -36,7 +53,7 @@ function LoginPage() {
               去注册
             </Link>
           </div>
-          <button className="primary-button primary-button--block" type="button">
+          <button className="primary-button primary-button--block" type="submit">
             登录平台
           </button>
         </form>

@@ -3,9 +3,12 @@ import ProductCard from '../../components/cards/ProductCard.jsx'
 import MarketCard from '../../components/cards/MarketCard.jsx'
 import ArticleCard from '../../components/cards/ArticleCard.jsx'
 import SectionHeading from '../../components/common/SectionHeading.jsx'
-import { heroStats, notices, products, supplyItems, demandItems, articles } from '../../mock/data/content.js'
+import { articles, heroStats, notices, products } from '../../mock/data/content.js'
+import { useAppState } from '../../store/AppStateProvider.jsx'
 
 function HomePage() {
+  const { supplyItems, demandItems } = useAppState()
+
   return (
     <div className="page page--home">
       <section className="hero-panel app-container">
@@ -33,7 +36,7 @@ function HomePage() {
           </div>
           <div className="hero-visual-card hero-visual-card--secondary">
             <strong>供需活跃</strong>
-            <span>今日新增 12 条供需信息</span>
+            <span>当前展示 {supplyItems.length + demandItems.length} 条供需信息</span>
           </div>
         </div>
       </section>

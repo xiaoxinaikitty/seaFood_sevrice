@@ -1082,3 +1082,20 @@ ul {
     white-space: nowrap;
   }
 }
+
+.market-card__footer--actions {
+  justify-content: space-between;
+}
+
+.market-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.inline-feedback {
+  margin-top: 14px !important;
+  color: var(--color-success) !important;
+  font-weight: 600;
+}

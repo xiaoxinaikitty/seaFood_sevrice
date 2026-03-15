@@ -6,13 +6,16 @@ import RegisterPage from '../pages/register/index.jsx'
 import ProductsPage from '../pages/products/index.jsx'
 import ProductDetailPage from '../pages/product-detail/index.jsx'
 import SupplyPage from '../pages/supply/index.jsx'
+import SupplyDetailPage from '../pages/supply-detail/index.jsx'
 import DemandPage from '../pages/demand/index.jsx'
+import DemandDetailPage from '../pages/demand-detail/index.jsx'
 import PublishSupplyPage from '../pages/publish-supply/index.jsx'
 import PublishDemandPage from '../pages/publish-demand/index.jsx'
 import NewsPage from '../pages/news/index.jsx'
 import NewsDetailPage from '../pages/news-detail/index.jsx'
 import OrdersPage from '../pages/orders/index.jsx'
 import OrderDetailPage from '../pages/order-detail/index.jsx'
+import CheckoutPage from '../pages/checkout/index.jsx'
 import MessagesPage from '../pages/messages/index.jsx'
 import ProfilePage from '../pages/profile/index.jsx'
 import NotFoundPage from '../pages/not-found/index.jsx'
@@ -27,8 +30,11 @@ const router = createBrowserRouter([
       { path: 'register', element: <RegisterPage /> },
       { path: 'products', element: <ProductsPage /> },
       { path: 'products/:id', element: <ProductDetailPage /> },
+      { path: 'checkout/:id', element: <CheckoutPage /> },
       { path: 'supply', element: <SupplyPage /> },
+      { path: 'supply/:id', element: <SupplyDetailPage /> },
       { path: 'demand', element: <DemandPage /> },
+      { path: 'demand/:id', element: <DemandDetailPage /> },
       { path: 'publish-supply', element: <PublishSupplyPage /> },
       { path: 'publish-demand', element: <PublishDemandPage /> },
       { path: 'news', element: <NewsPage /> },

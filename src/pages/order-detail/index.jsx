@@ -1,11 +1,12 @@
 import { Link, useParams } from 'react-router-dom'
 import EmptyState from '../../components/common/EmptyState.jsx'
 import StatusPill from '../../components/common/StatusPill.jsx'
-import { getOrderById } from '../../mock/data/content.js'
+import { useAppState } from '../../store/AppStateProvider.jsx'
 
 function OrderDetailPage() {
   const { id } = useParams()
-  const order = getOrderById(id)
+  const { orders, updateOrderStatus } = useAppState()
+  const order = orders.find((item) => item.id === id)
 
   if (!order) {
     return (
@@ -23,7 +24,7 @@ function OrderDetailPage() {
           <h1>{order.title}</h1>
           <p>{order.id}</p>
         </div>
-        <StatusPill tone={order.status === '已完成' ? 'success' : 'info'}>{order.status}</StatusPill>
+        <StatusPill tone={order.status === '已完成' ? 'success' : order.status === '已取消' ? 'danger' : 'info'}>{order.status}</StatusPill>
       </section>
       <section className="detail-section-grid">
         <article className="detail-section-card">
@@ -49,8 +50,8 @@ function OrderDetailPage() {
             <div><dt>备注</dt><dd>{order.note}</dd></div>
           </div>
           <div className="detail-panel__actions">
-            <button className="primary-button" type="button">确认收货</button>
-            <button className="ghost-button" type="button">取消订单</button>
+            <button className="primary-button" onClick={() => updateOrderStatus(order.id, '已完成')} type="button">确认收货</button>
+            <button className="ghost-button" onClick={() => updateOrderStatus(order.id, '已取消')} type="button">取消订单</button>
           </div>
         </article>
       </section>

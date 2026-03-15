@@ -1,6 +1,9 @@
+import { Link } from 'react-router-dom'
 import StatusPill from '../common/StatusPill.jsx'
 
 function MarketCard({ item, type = 'supply' }) {
+  const detailPath = type === 'supply' ? `/supply/${item.id}` : `/demand/${item.id}`
+
   return (
     <article className="market-card">
       <div className="market-card__header">
@@ -30,11 +33,16 @@ function MarketCard({ item, type = 'supply' }) {
           <dd>{item.location}</dd>
         </div>
       </dl>
-      <div className="market-card__footer">
+      <div className="market-card__footer market-card__footer--actions">
         <span>{item.updatedAt}</span>
-        <button className="ghost-button" type="button">
-          {type === 'supply' ? '联系供方' : '响应需求'}
-        </button>
+        <div className="market-card__actions">
+          <Link className="text-link" to={detailPath}>
+            查看详情
+          </Link>
+          <Link className="ghost-button" to={detailPath}>
+            {type === 'supply' ? '联系供方' : '响应需求'}
+          </Link>
+        </div>
       </div>
     </article>
   )

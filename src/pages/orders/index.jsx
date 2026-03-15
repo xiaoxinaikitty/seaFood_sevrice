@@ -1,8 +1,18 @@
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import StatusPill from '../../components/common/StatusPill.jsx'
-import { orderTabs, orders } from '../../mock/data/content.js'
+import { orderTabs } from '../../mock/data/content.js'
+import { useAppState } from '../../store/AppStateProvider.jsx'
 
 function OrdersPage() {
+  const { orders } = useAppState()
+  const [activeTab, setActiveTab] = useState('全部')
+
+  const filteredOrders = useMemo(
+    () => orders.filter((order) => activeTab === '全部' || order.status === activeTab),
+    [activeTab, orders],
+  )
+
   return (
     <div className="page app-container">
       <section className="page-banner">
@@ -14,15 +24,15 @@ function OrdersPage() {
       </section>
       <section className="filter-panel">
         <div className="chip-list">
-          {orderTabs.map((tab, index) => (
-            <button key={tab} className={`chip${index === 0 ? ' is-active' : ''}`} type="button">
+          {orderTabs.map((tab) => (
+            <button key={tab} className={`chip${activeTab === tab ? ' is-active' : ''}`} onClick={() => setActiveTab(tab)} type="button">
               {tab}
             </button>
           ))}
         </div>
       </section>
       <section className="stack-list">
-        {orders.map((order) => (
+        {filteredOrders.map((order) => (
           <article key={order.id} className="order-card">
             <div className="order-card__header">
               <div>

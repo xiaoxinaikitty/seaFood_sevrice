@@ -1,7 +1,17 @@
+import { useMemo, useState } from 'react'
 import StatusPill from '../../components/common/StatusPill.jsx'
-import { messageTabs, messages } from '../../mock/data/content.js'
+import { messageTabs } from '../../mock/data/content.js'
+import { useAppState } from '../../store/AppStateProvider.jsx'
 
 function MessagesPage() {
+  const { markAllMessagesRead, messages } = useAppState()
+  const [activeTab, setActiveTab] = useState('系统通知')
+
+  const filteredMessages = useMemo(
+    () => messages.filter((item) => item.category === activeTab),
+    [activeTab, messages],
+  )
+
   return (
     <div className="page app-container">
       <section className="page-banner">
@@ -10,20 +20,20 @@ function MessagesPage() {
           <h1>消息通知</h1>
           <p>涵盖系统通知、审核结果、订单更新和互动消息四类内容。</p>
         </div>
-        <button className="ghost-button" type="button">全部已读</button>
+        <button className="ghost-button" onClick={markAllMessagesRead} type="button">全部已读</button>
       </section>
       <section className="filter-panel">
         <div className="chip-list">
-          {messageTabs.map((tab, index) => (
-            <button key={tab} className={`chip${index === 0 ? ' is-active' : ''}`} type="button">
+          {messageTabs.map((tab) => (
+            <button key={tab} className={`chip${activeTab === tab ? ' is-active' : ''}`} onClick={() => setActiveTab(tab)} type="button">
               {tab}
             </button>
           ))}
         </div>
       </section>
       <section className="stack-list">
-        {messages.map((item) => (
-          <article key={item.title} className="message-card">
+        {filteredMessages.map((item) => (
+          <article key={`${item.title}-${item.time}`} className="message-card">
             <div className="message-card__header">
               <div>
                 <h3>{item.title}</h3>

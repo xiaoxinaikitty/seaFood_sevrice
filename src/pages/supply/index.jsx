@@ -1,9 +1,18 @@
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import MarketCard from '../../components/cards/MarketCard.jsx'
-import SectionHeading from '../../components/common/SectionHeading.jsx'
-import { supplyItems, categoryFilters } from '../../mock/data/content.js'
+import { categoryFilters } from '../../mock/data/content.js'
+import { useAppState } from '../../store/AppStateProvider.jsx'
 
 function SupplyPage() {
+  const { supplyItems } = useAppState()
+  const [activeCategory, setActiveCategory] = useState('全部')
+
+  const filteredItems = useMemo(
+    () => supplyItems.filter((item) => activeCategory === '全部' || item.category === activeCategory),
+    [activeCategory, supplyItems],
+  )
+
   return (
     <div className="page app-container">
       <section className="page-banner page-banner--market">
@@ -20,8 +29,8 @@ function SupplyPage() {
         <div className="filter-group">
           <span>热门分类</span>
           <div className="chip-list">
-            {categoryFilters.map((item, index) => (
-              <button key={item} className={`chip${index === 0 ? ' is-active' : ''}`} type="button">
+            {categoryFilters.map((item) => (
+              <button key={item} className={`chip${activeCategory === item ? ' is-active' : ''}`} onClick={() => setActiveCategory(item)} type="button">
                 {item}
               </button>
             ))}
@@ -29,7 +38,7 @@ function SupplyPage() {
         </div>
       </section>
       <section className="stack-list">
-        {supplyItems.map((item) => (
+        {filteredItems.map((item) => (
           <MarketCard key={item.id} item={item} type="supply" />
         ))}
       </section>

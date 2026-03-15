@@ -1,4 +1,30 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAppState } from '../../store/AppStateProvider.jsx'
+
 function PublishDemandPage() {
+  const navigate = useNavigate()
+  const { addDemandItem } = useAppState()
+  const [form, setForm] = useState({
+    title: '',
+    category: '',
+    quantity: '',
+    price: '',
+    origin: '',
+    description: '',
+  })
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setForm((current) => ({ ...current, [name]: value }))
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const id = addDemandItem(form)
+    navigate(`/demand/${id}`)
+  }
+
   return (
     <div className="page app-container">
       <section className="page-banner">
@@ -9,40 +35,40 @@ function PublishDemandPage() {
         </div>
       </section>
       <section className="editor-layout">
-        <form className="editor-form">
+        <form className="editor-form" onSubmit={handleSubmit}>
           <label>
             <span>求购标题</span>
-            <input type="text" placeholder="例如：求购宴会用深海白虾" />
+            <input name="title" onChange={handleChange} type="text" placeholder="例如：求购宴会用深海白虾" value={form.title} />
           </label>
           <div className="form-grid form-grid--double">
             <label>
               <span>目标品类</span>
-              <input type="text" placeholder="请输入品类" />
+              <input name="category" onChange={handleChange} type="text" placeholder="请输入品类" value={form.category} />
             </label>
             <label>
               <span>目标数量</span>
-              <input type="text" placeholder="例如：60 盒" />
+              <input name="quantity" onChange={handleChange} type="text" placeholder="例如：60 盒" value={form.quantity} />
             </label>
             <label>
               <span>预算范围</span>
-              <input type="text" placeholder="例如：¥100 - ¥130 / 盒" />
+              <input name="price" onChange={handleChange} type="text" placeholder="例如：¥100 - ¥130 / 盒" value={form.price} />
             </label>
             <label>
               <span>期望产地</span>
-              <input type="text" placeholder="请输入产地偏好" />
+              <input name="origin" onChange={handleChange} type="text" placeholder="请输入产地偏好" value={form.origin} />
             </label>
           </div>
           <label>
             <span>补充说明</span>
-            <textarea placeholder="说明采购用途、规格偏好、交付时间等。" rows="6" />
+            <textarea name="description" onChange={handleChange} placeholder="说明采购用途、规格偏好、交付时间等。" rows="6" value={form.description} />
           </label>
-          <button className="primary-button" type="button">发布求购</button>
+          <button className="primary-button" type="submit">发布求购</button>
         </form>
         <aside className="editor-side-card">
           <h2>审核规则</h2>
           <ul className="content-list">
             <li>预算和数量应尽量填写完整，便于供应者评估。</li>
-            <li>求购信息发布后将进入求购广场，并通过站内消息通知相关用户。</li>
+            <li>求购信息发布后会跳转到详情页，并可继续查看响应入口。</li>
             <li>该页当前为静态原型，后续可直接挂接接口。</li>
           </ul>
         </aside>
