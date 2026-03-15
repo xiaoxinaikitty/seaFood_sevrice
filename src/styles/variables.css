@@ -1,0 +1,22 @@
+:root {
+  --color-primary: #0e7490;
+  --color-primary-deep: #155e75;
+  --color-primary-soft: rgba(14, 116, 144, 0.12);
+  --color-accent: #f97316;
+  --color-success: #16a34a;
+  --color-warning: #f59e0b;
+  --color-danger: #dc2626;
+  --color-info: #0284c7;
+  --color-text: #0f172a;
+  --color-text-secondary: #64748b;
+  --color-border: #dbe7f0;
+  --color-surface: #ffffff;
+  --color-bg: #f7fcff;
+  --color-bg-deep: #edf8fb;
+  --shadow-card: 0 18px 40px rgba(14, 116, 144, 0.08);
+  --shadow-hover: 0 18px 44px rgba(15, 23, 42, 0.12);
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --font-sans: 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+}
