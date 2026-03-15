@@ -57,6 +57,10 @@ export function AppStateProvider({ children }) {
   )
   const [profile] = useState(defaultProfile)
 
+  const pushMessage = (message) => {
+    setMessages((current) => [message, ...current])
+  }
+
   const login = () => {
     setIsLoggedIn(true)
   }
@@ -99,32 +103,42 @@ export function AppStateProvider({ children }) {
     }
 
     setOrders((current) => [newOrder, ...current])
-    setMessages((current) => [
-      {
-        category: '订单通知',
-        title: '模拟订单已提交',
-        summary: `${product.name} 的订单已创建，当前状态为待确认。`,
-        time: '刚刚',
-        unread: true,
-      },
-      ...current,
-    ])
+    pushMessage({
+      category: '订单通知',
+      title: '模拟订单已提交',
+      summary: `${product.name} 的订单已创建，当前状态为待确认。`,
+      time: '刚刚',
+      unread: true,
+    })
 
     return orderId
   }
 
-  const updateOrderStatus = (orderId, status) => {
+  const updateOrderStatus = (orderId, status, extraNote = '') => {
+    const order = orders.find((item) => item.id === orderId)
+
     setOrders((current) =>
       current.map((item) =>
         item.id === orderId
           ? {
               ...item,
               status,
+              note: extraNote || item.note,
               timeline: buildTimeline(status),
             }
           : item,
       ),
     )
+
+    if (order) {
+      pushMessage({
+        category: '订单通知',
+        title: `订单状态已更新为${status}`,
+        summary: `${order.title} 已更新，${extraNote || '请进入订单详情页查看最新状态。'}`,
+        time: '刚刚',
+        unread: true,
+      })
+    }
   }
 
   const addSupplyItem = (payload) => {
@@ -168,6 +182,26 @@ export function AppStateProvider({ children }) {
     return newItem.id
   }
 
+  const submitSupplyIntent = (item, payload) => {
+    pushMessage({
+      category: '互动消息',
+      title: '采购意向已发送',
+      summary: `已向 ${item.subtitle} 提交 ${payload.quantity} 的采购意向，请关注后续沟通消息。`,
+      time: '刚刚',
+      unread: true,
+    })
+  }
+
+  const submitDemandResponse = (item, payload) => {
+    pushMessage({
+      category: '互动消息',
+      title: '需求响应已提交',
+      summary: `你已对“${item.title}”提交报价 ${payload.quote}，等待对方确认。`,
+      time: '刚刚',
+      unread: true,
+    })
+  }
+
   const value = useMemo(
     () => ({
       isLoggedIn,
@@ -185,6 +219,8 @@ export function AppStateProvider({ children }) {
       updateOrderStatus,
       addSupplyItem,
       addDemandItem,
+      submitSupplyIntent,
+      submitDemandResponse,
     }),
     [demandItems, favorites, isLoggedIn, messages, orders, profile, supplyItems],
   )
